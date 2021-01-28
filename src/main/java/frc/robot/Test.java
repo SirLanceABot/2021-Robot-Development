@@ -33,9 +33,6 @@ import frc.components.powercellsupervisor.shuttle.Shuttle;
 /**
  * @author Elliot Measel
  * class for the test mode on the robot
- * this is a test....this is only a test
- * more testing
- * and again
  */
 public class Test
 {
