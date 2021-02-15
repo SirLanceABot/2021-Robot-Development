@@ -1,7 +1,8 @@
 package frc.sensors;
- 
+
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /**
@@ -95,6 +96,14 @@ public class NavX// extends AHRS
         return angleOfPowerPortWall;
     }
 
+    public Rotation2d getRotation2d()
+    {
+        return ahrs.getRotation2d();
+    }
 
+    public void reset()
+    {
+        ahrs.reset();
+    }
 
 }

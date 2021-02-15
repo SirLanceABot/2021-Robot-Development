@@ -4,13 +4,21 @@ import frc.components.motor.MyVictorSPX;
 import frc.robot.Port;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.sensors.NavX;
 
 
@@ -28,6 +36,8 @@ public class Drivetrain extends DifferentialDrive
         System.out.println(className + " : Class Loading");
     }
 
+    private static NavX navX = NavX.getInstance();
+
     private static WPI_TalonFX frontRightMotor = new WPI_TalonFX(Port.Motor.CAN_DRIVETRAIN_FRONT_RIGHT);
     private static WPI_TalonFX backRightMotor = new WPI_TalonFX(Port.Motor.CAN_DRIVETRAIN_BACK_RIGHT);
     private static WPI_TalonFX backLeftMotor = new WPI_TalonFX(Port.Motor.CAN_DRIVETRAIN_BACK_LEFT);
@@ -40,7 +50,16 @@ public class Drivetrain extends DifferentialDrive
     private static SpeedControllerGroup rightMotors = new SpeedControllerGroup(frontRightMotor, backRightMotor);
     private static SpeedControllerGroup leftMotors = new SpeedControllerGroup(frontLeftMotor, backLeftMotor);
 
-    private static NavX navX = NavX.getInstance();
+    private static final PIDController leftPIDController = new PIDController(1, 0, 0);
+    private static final PIDController rightPIDController = new PIDController(1, 0, 0);
+
+    // private static DifferentialDrive drivetrain = null;
+    private static final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(0.689);
+    private static final DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(navX.getRotation2d());
+
+    // Gains are for example purposes only - must be determined for your own robot!
+    // private static final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(1, 3);
+    private static final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.22, 1.98, 0.2); 
 
     private static boolean driveInitFlag = true;
     private static double targetDistance = 0.0;
@@ -64,6 +83,8 @@ public class Drivetrain extends DifferentialDrive
         super(leftMotors, rightMotors);
         
         System.out.println(className + " : Constructor Started");
+
+        navX.reset();
 
         frontRightMotor.configFactoryDefault();
         frontRightMotor.setInverted(true);
@@ -139,7 +160,15 @@ public class Drivetrain extends DifferentialDrive
         backLeftMotor.configOpenloopRamp(0.5);
         backLeftMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 60, 0.5), 10);
         backLeftMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 40, 60, 0.5), 10);
-		
+        
+        // TODO: convert to falcon_fx 
+            //spark max commands: 
+        // leftEncoder.setVelocityConversionFactor(Constants.ENCODER_METER_PER_REV / 60.0);
+        // rightEncoder.setVelocityConversionFactor(Constants.ENCODER_METER_PER_REV / 60.0);
+
+        // leftEncoder.setPositionConversionFactor(Constants.ENCODER_METER_PER_REV);
+        // rightEncoder.setPositionConversionFactor(Constants.ENCODER_METER_PER_REV);
+
 		resetEncoders();
 
         /**
@@ -301,8 +330,6 @@ public class Drivetrain extends DifferentialDrive
             return false;
         }
     }
-
-        
 
 
     /**
@@ -472,5 +499,68 @@ public class Drivetrain extends DifferentialDrive
         return String.format("%+5.2f %6f %4.1f %4.1f", 
             backLeftMotor.getMotorOutputPercent(), backLeftMotor.getSelectedSensorPosition(), 
             backLeftMotor.getStatorCurrent(), backLeftMotor.getTemperature());
+    }
+
+    public Pose2d getPose()
+    {
+        return odometry.getPoseMeters();
+    }
+
+    public DifferentialDriveKinematics getKinematics()
+    {
+        return kinematics;
+    }
+
+    public SimpleMotorFeedforward getMotorFeedforward()
+    {
+        return feedforward;
+    }
+
+    /**
+     * Sets the desired wheel speeds.
+     *
+     * @param speeds The desired wheel speeds.
+     */
+    public void setSpeeds(DifferentialDriveWheelSpeeds speeds)
+    {
+        final double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
+        final double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
+
+        final double leftOutput = leftPIDController.calculate(backLeftMotor.getSelectedSensorVelocity(), speeds.leftMetersPerSecond);
+        final double rightOutput = rightPIDController.calculate(backRightMotor.getSelectedSensorVelocity(), speeds.rightMetersPerSecond);
+
+        // leftGroup.setVoltage(leftOutput + leftFeedforward);
+        // rightGroup.setVoltage(rightOutput + rightFeedforward);
+        leftMotors.setVoltage(leftOutput + leftFeedforward);
+        rightMotors.setVoltage(rightOutput + rightFeedforward);
+    }
+
+    /**
+     * Drives the robot with the given linear velocity and angular velocity.
+     *
+     * @param xSpeed Linear velocity in m/s.
+     * @param rot Angular velocity in rad/s.
+     */
+    @SuppressWarnings("ParameterName")
+    public void drive(double xSpeed, double rot)
+    {
+        final DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
+        setSpeeds(wheelSpeeds);
+        super.feed();
+    }
+
+    public void updateOdometry()
+    {
+        odometry.update(navX.getRotation2d(), backLeftMotor.getSelectedSensorPosition(), backRightMotor.getSelectedSensorPosition());
+    }
+
+    /**
+     * Resets the field-relative position to a specific location.
+     *
+     * @param pose The position to reset to.
+     */
+    public void resetOdometry(Pose2d pose)
+    {
+        odometry.resetPosition(pose, navX.getRotation2d());
     }
 }
