@@ -72,7 +72,7 @@ public class Shooter implements Notified
         System.out.println(turretVision.isTargetFound() + "\tframe number: " + turretVision.getFrameNumber());
         if(turretVision.isFreshData())
         {
-          System.out.println("isTargetFound: " + turretVision.isTargetFound());
+          // System.out.println("isTargetFound: " + turretVision.isTargetFound());
             if(turretVision.isTargetFound())
             {
               currentState = Transition.findNextState(currentState, Event.TapeFound);

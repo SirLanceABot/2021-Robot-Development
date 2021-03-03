@@ -35,9 +35,9 @@ public class AutonomousExecuter
             if(areCommandsDone(currentCommandList) == true)
             {
                 System.out.println("Ending the Command number: " + currentCommandIndex);
-                currentCommandIndex++;
                 hasBeenInitialized = false;
                 endCommands(currentCommandList);
+                currentCommandIndex++;
             }
             else if(hasBeenInitialized == false)
             {
@@ -56,14 +56,6 @@ public class AutonomousExecuter
             System.out.println("Done w auto");
         }
     }
-
-
-
-
-
-
-
-
 
     /**
      * checks to see if all the commands that are running in parrallel are done
@@ -86,7 +78,7 @@ public class AutonomousExecuter
 
     public void initCommands(ArrayList<Command> commands)
     {
-        for(Command command: commands)
+        for(Command command : commands)
         {
             command.init();
         }
@@ -94,7 +86,7 @@ public class AutonomousExecuter
 
     public void executeCommands(ArrayList<Command> commands)
     {
-        for(Command command: commands)
+        for(Command command : commands)
         {
             if(!command.isFinished())
             {
@@ -105,7 +97,14 @@ public class AutonomousExecuter
 
     public void endCommands(ArrayList<Command> commands)
     {
-        for(Command command: commands)
+        for(Command command : commands)
+        {
+            command.end();
+        }
+    }
+    public void endCommands()
+    {
+        for(Command command : commandList.get(currentCommandIndex))
         {
             command.end();
         }

@@ -68,4 +68,9 @@ public class Disabled
             mainShuffleboard.checkForNewAutonomousTabData();
         }
     }
+
+    public void end()
+    {
+        
+    }
 }

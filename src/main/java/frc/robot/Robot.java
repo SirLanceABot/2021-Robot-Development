@@ -140,11 +140,20 @@ public class Robot extends TimedRobot
         if (robotState == RobotState.kStartup)
             robotState = RobotState.kDisabledBeforeGame;
         else if (robotState == RobotState.kAutonomous)
+        {
             robotState = RobotState.kDisabledBetweenAutonomousAndTeleop;
+            autonomous.end();
+        }
         else if (robotState == RobotState.kTeleop)
+        {
             robotState = RobotState.kDisabledAfterGame;
+            teleop.end();
+        }
         else if (robotState == RobotState.kTest)
+        {
             robotState = RobotState.kDisabledBeforeGame;
+            test.end();
+        }
 
         disabled.init();
     }

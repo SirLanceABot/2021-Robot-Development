@@ -60,7 +60,7 @@ public class AutonomousBuilder
     public void buildCommandList()
     {
         addCommandNode(new Shooting());
-        // addCommandNode(new Drive(-50));
+        addCommandNode(new Drive(-50));
 
         // addCommandNode(new Drive(50), new Intaking(6));
         // addCommandNode(new Drive(-50));

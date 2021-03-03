@@ -71,21 +71,6 @@ public class Autonomous
         //pathWeaverInit();
     }
 
-    public void pathWeaverInit()
-    {
-        currentPath = 0;
-        newPathStarted = true;
-        finished = false;
-        currentPathTotalTime = 0.0;
-
-        // Initialize the timer.
-        timer.reset();
-        timer.start();
-
-        // Reset the drivetrain's odometry to the starting pose of the trajectory.
-        drivetrain.resetOdometry(trajectory.get(0).getInitialPose());
-    }
-
     public void periodic()
     {
         autonomousExecuter.executeAuto();
@@ -110,6 +95,26 @@ public class Autonomous
         // }
 
         // pathWeaverPeriodic();
+    }
+
+    public void end()
+    {
+        autonomousExecuter.endCommands();
+    }
+
+    public void pathWeaverInit()
+    {
+        currentPath = 0;
+        newPathStarted = true;
+        finished = false;
+        currentPathTotalTime = 0.0;
+
+        // Initialize the timer.
+        timer.reset();
+        timer.start();
+
+        // Reset the drivetrain's odometry to the starting pose of the trajectory.
+        drivetrain.resetOdometry(trajectory.get(0).getInitialPose());
     }
 
     public void pathWeaverPeriodic()

@@ -156,4 +156,9 @@ public class Teleop
 
         driverController.checkRumbleEvent();
     }
+
+    public void end()
+    {
+        shooter.overrideFSM();
+    }
 }
