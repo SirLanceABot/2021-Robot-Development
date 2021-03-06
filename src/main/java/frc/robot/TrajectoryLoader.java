@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import frc.shuffleboard.SkillsCompetitionTab.AutoNavPath;
 
 import frc.components.drivetrain.Drivetrain;
 
@@ -23,7 +24,7 @@ public class TrajectoryLoader
 {
     private static final String fullClassName = MethodHandles.lookup().lookupClass().getCanonicalName();
     
-    public enum PathOption {BarrelRacing, Bounce, Slalom, Manual};
+    //public enum PathOption {BarrelRacing, Bounce, Slalom, Manual};
     
     private static final Drivetrain drivetrain = Drivetrain.getInstance();
     private static final ArrayList<Trajectory> trajectory = new ArrayList<Trajectory>();
@@ -49,18 +50,21 @@ public class TrajectoryLoader
         System.out.println("Constructor Finishing: " + fullClassName);
     }
 
-    public ArrayList<Trajectory> getTrajectory(PathOption pathOption)
+    public ArrayList<Trajectory> getTrajectory(AutoNavPath pathOption)
     {
         switch(pathOption)
         {
-        case BarrelRacing:
-        case Bounce:
-        case Slalom:
-            createTrajectoryFromFile(pathOption);
-            break;
-        case Manual:
-            createTrajectoryFromPoints();
-            break;
+            case kNone:
+                createTrajectoryFromPoints();
+                break;
+            case kBarrelRacing:
+            case kSlalom:
+            case kBounce:
+                System.out.println("Path = " + pathOption);
+                // createTrajectoryFromFile(pathOption);
+                break;
+            default:
+                break;
         }
 
         return trajectory;
@@ -79,7 +83,7 @@ public class TrajectoryLoader
         );
     }
 
-    private void createTrajectoryFromFile(PathOption pathOption)
+    private void createTrajectoryFromFile(AutoNavPath pathOption)
     {
         int pathNumber = 1;
         boolean done = false;

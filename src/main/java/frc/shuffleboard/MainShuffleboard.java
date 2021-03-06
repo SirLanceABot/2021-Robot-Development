@@ -1,6 +1,7 @@
 package frc.shuffleboard;
 
 import frc.shuffleboard.AutonomousTab.AutonomousTabData;
+import frc.shuffleboard.SkillsCompetitionTab.SkillsCompetitionTabData;
 
 /**
  * The MainShuffleboard class will be the main interface to access the other
@@ -33,6 +34,7 @@ public class MainShuffleboard
     private OperatorControllerTab operatorControllerTab = OperatorControllerTab.getInstance();
     private CameraTab cameraTab = CameraTab.getInstance();
     private SensorsTab sensorsTab = SensorsTab.getInstance();
+    private SkillsCompetitionTab skillsCompetitionTab = SkillsCompetitionTab.getInstance();
 
     private static MainShuffleboard instance = new MainShuffleboard();
 
@@ -58,6 +60,13 @@ public class MainShuffleboard
     public void checkForNewAutonomousTabData()
     {
         autonomousTab.checkForNewAutonomousTabData();
+    }
+
+    // ------------------------------------------------------------------------------------
+    // SKILLS COMPETITION TAB
+    public SkillsCompetitionTabData getSkillsCompetitionTabData()
+    {
+        return skillsCompetitionTab.getSkillsCompetitionTabData();
     }
 
     // ------------------------------------------------------------------------------------

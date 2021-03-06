@@ -13,6 +13,9 @@ import frc.components.drivetrain.Drivetrain;
 import frc.components.powercellsupervisor.shooter.Flywheel;
 import frc.components.powercellsupervisor.shuttle.Shuttle;
 import frc.controls.DriverController;
+import frc.shuffleboard.MainShuffleboard;
+import frc.shuffleboard.SkillsCompetitionTab;
+import frc.shuffleboard.SkillsCompetitionTab.SkillsCompetitionTabData;
 
 public class Autonomous
 {
@@ -31,9 +34,11 @@ public class Autonomous
     private static Flywheel flywheel = Flywheel.getInstance();
     private static Timer timer = new Timer();
     private static Drivetrain drivetrain = Drivetrain.getInstance();
+    private static MainShuffleboard mainShuffleboard = MainShuffleboard.getInstance();
 
     private static final TrajectoryLoader trajectoryLoader = new TrajectoryLoader();
-    private static final ArrayList<Trajectory> trajectory = trajectoryLoader.getTrajectory(TrajectoryLoader.PathOption.Slalom);
+    //TODO: Change path driven using ifs
+    private static ArrayList<Trajectory> trajectory = new ArrayList<>();// = trajectoryLoader.getTrajectory(TrajectoryLoader.PathOption.Slalom);
 
     // The Ramsete Controller to follow the trajectory.
     private static final RamseteController ramseteController = new RamseteController(2.0, 0.7);
@@ -66,14 +71,14 @@ public class Autonomous
         // timer.reset();
         // timer.start();
         
-        autonomousBuilder.buildCommandList();
+        // autonomousBuilder.buildCommandList();
 
-        //pathWeaverInit();
+        pathWeaverInit();
     }
 
     public void periodic()
     {
-        autonomousExecuter.executeAuto();
+        // autonomousExecuter.executeAuto();
 
         // flywheel.setSpeed(0.20);
         // if(timer.get() > 1.5)
@@ -104,6 +109,11 @@ public class Autonomous
 
     public void pathWeaverInit()
     {
+        // TODO: Use disabled periodic to query shuffleboard for autonav path
+        SkillsCompetitionTabData skillsCompetitionTabData = mainShuffleboard.getSkillsCompetitionTabData();
+
+        trajectory = trajectoryLoader.getTrajectory(skillsCompetitionTabData.autoNavPath);
+
         currentPath = 0;
         newPathStarted = true;
         finished = false;
