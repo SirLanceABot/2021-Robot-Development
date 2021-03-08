@@ -27,7 +27,6 @@ public class Autonomous
         System.out.println(className + " : Class Loading");
     }
 
-    private static Autonomous instance = new Autonomous();
     private static AutonomousExecuter autonomousExecuter = AutonomousExecuter.getAutonomousExecuter();
     private static AutonomousBuilder autonomousBuilder = AutonomousBuilder.getInstance();
     private static Shuttle shuttle = Shuttle.getInstance();
@@ -35,8 +34,7 @@ public class Autonomous
     private static Timer timer = new Timer();
     private static Drivetrain drivetrain = Drivetrain.getInstance();
     private static MainShuffleboard mainShuffleboard = MainShuffleboard.getInstance();
-
-    private static final TrajectoryLoader trajectoryLoader = new TrajectoryLoader();
+    private static TrajectoryLoader trajectoryLoader = TrajectoryLoader.getInstance();
     //TODO: Change path driven using ifs
     private static ArrayList<Trajectory> trajectory = new ArrayList<>();// = trajectoryLoader.getTrajectory(TrajectoryLoader.PathOption.Slalom);
 
@@ -47,6 +45,9 @@ public class Autonomous
     private static boolean newPathStarted = false;
     private static boolean finished = false;
     private static double currentPathTotalTime = 0.0;
+
+    private static Autonomous instance = new Autonomous();
+
     /**
      * The constructor for the Autonomous class. 
      */
@@ -109,10 +110,7 @@ public class Autonomous
 
     public void pathWeaverInit()
     {
-        // TODO: Use disabled periodic to query shuffleboard for autonav path
-        SkillsCompetitionTabData skillsCompetitionTabData = mainShuffleboard.getSkillsCompetitionTabData();
-
-        trajectory = trajectoryLoader.getTrajectory(skillsCompetitionTabData.autoNavPath);
+        trajectory = trajectoryLoader.getTrajectory();
 
         currentPath = 0;
         newPathStarted = true;

@@ -2,6 +2,7 @@ package frc.robot;
 
 import frc.robot.Robot.RobotState;
 import frc.shuffleboard.MainShuffleboard;
+import frc.shuffleboard.SkillsCompetitionTab.SkillsCompetitionTabData;
 import frc.vision.Vision;
 
 /**
@@ -22,6 +23,9 @@ public class Disabled
     private RobotState robotState;
 
     private static MainShuffleboard mainShuffleboard = MainShuffleboard.getInstance();
+    private static TrajectoryLoader trajectoryLoader = TrajectoryLoader.getInstance();
+
+    private static SkillsCompetitionTabData skillsCompetitionTabDataOld = new SkillsCompetitionTabData();
 
     private static Disabled instance = new Disabled();
     /**
@@ -42,6 +46,8 @@ public class Disabled
     public void init()
     {
         robotState = Robot.getRobotState();
+
+        skillsCompetitionTabDataOld = mainShuffleboard.getSkillsCompetitionTabData();
     }
 
     public void periodic()
@@ -66,6 +72,15 @@ public class Disabled
             }
             mainShuffleboard.updateMatchInfo();
             mainShuffleboard.checkForNewAutonomousTabData();
+        }
+
+        SkillsCompetitionTabData skillsCompetitionTabDataNew = mainShuffleboard.getSkillsCompetitionTabData();
+
+        if (skillsCompetitionTabDataOld.autoNavPath != skillsCompetitionTabDataNew.autoNavPath)
+        {
+            trajectoryLoader.createTrajectoryFromPath(skillsCompetitionTabDataNew.autoNavPath);
+
+            skillsCompetitionTabDataOld = skillsCompetitionTabDataNew;
         }
     }
 

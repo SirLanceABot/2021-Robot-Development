@@ -53,7 +53,7 @@ public class Shooter implements Notified
       {
         //System.out.println("State: Off");
         // shuttle.stop();
-        //turnLightOff();
+        turnLightOff();
         flywheel.stop();
         shroud.setSpeed(-0.33);
         if(operatorController.getAction(OperatorButtonAction.kAutoAim) || notification)

@@ -33,6 +33,7 @@ public class TrajectoryLoader
     private static final TrajectoryConfig trajectoryConfig =
             new TrajectoryConfig(1.0, 1.0).setKinematics(drivetrain.getKinematics()).addConstraint(voltageConstraint);
 
+    private static TrajectoryLoader instance = new TrajectoryLoader();
 
     // *** STATIC INITIALIZATION BLOCK ****************************************
     // This block of code is run first when the class is loaded
@@ -42,7 +43,7 @@ public class TrajectoryLoader
     }
 
 
-    public TrajectoryLoader()
+    private TrajectoryLoader()
     {
         System.out.println("Constructor Starting: " + fullClassName);
         // Add your constructor code here
@@ -50,7 +51,22 @@ public class TrajectoryLoader
         System.out.println("Constructor Finishing: " + fullClassName);
     }
 
-    public ArrayList<Trajectory> getTrajectory(AutoNavPath pathOption)
+    /**
+     * The method to retrieve the instance of TrajectoryLoader.
+     * @return instance 
+     */
+    public static TrajectoryLoader getInstance()
+    {
+        return instance;
+    }
+
+    // Accessor for trajectory
+    public ArrayList<Trajectory> getTrajectory()
+    {
+        return trajectory;
+    }
+
+    public void createTrajectoryFromPath(AutoNavPath pathOption)
     {
         switch(pathOption)
         {
@@ -66,8 +82,6 @@ public class TrajectoryLoader
             default:
                 break;
         }
-
-        return trajectory;
     }
 
     private void createTrajectoryFromPoints()
