@@ -77,7 +77,7 @@ public class TrajectoryLoader
             case kSlalom:
             case kBounce:
                 System.out.println("Path = " + pathOption);
-                // createTrajectoryFromFile(pathOption);
+                createTrajectoryFromFile(pathOption);
                 break;
             default:
                 break;

@@ -30,7 +30,7 @@ public class DriverController extends Xbox
         kIntakeDown(Button.kX),
 
         kIntakeReverse(Button.kLeftBumper),
-        kIntakeOn(Button.kRightBumper)
+        kIntakeOn(Button.kRightBumper),
 
         // kNoAction(Button.kBack),
         // kNoAction(Button.kStart),
@@ -74,6 +74,20 @@ public class DriverController extends Xbox
             this.axisMaxOutput = axisMaxOutput;
             this.axisIsFlipped = axisIsFlipped;
             this.axisScale = axisScale;
+        } 
+    }
+
+    public enum DriverPOVAction
+    {
+        kShiftingDown(180),
+        kShiftingUp(0)
+        ;
+
+        public final int direction;
+
+        private DriverPOVAction(int direction)
+        {
+            this.direction = direction;
         } 
     }
 
@@ -195,6 +209,11 @@ public class DriverController extends Xbox
     public double getAction(DriverAxisAction axisAction)
     {
         return getRawAxis(axisAction.axis);
+    }
+
+    public int getAction()
+    {
+        return getPOV();
     }
 
     public void resetRumbleCounter()

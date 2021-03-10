@@ -15,7 +15,7 @@ import frc.components.powercellsupervisor.shuttle.Shuttle;
 import frc.controls.DriverController;
 import frc.controls.DriverController.DriverAxisAction;
 import frc.controls.DriverController.DriverButtonAction;
-
+import frc.controls.DriverController.DriverPOVAction;
 import frc.controls.OperatorController;
 import frc.controls.OperatorController.OperatorAxisAction;
 import frc.controls.OperatorController.OperatorButtonAction;
@@ -149,6 +149,16 @@ public class Teleop
         //run the drivetrain
         drivetrain.westCoastDrive(driverController.getAction(DriverAxisAction.kMove)
                                 , driverController.getAction(DriverAxisAction.kRotate));
+
+        if(driverController.getAction() == DriverPOVAction.kShiftingUp.direction)
+        {
+            drivetrain.forceShiftUp();
+        }
+        else if(driverController.getAction() == DriverPOVAction.kShiftingDown.direction)
+        {
+            drivetrain.forceShiftDown();
+
+        }
 
         //run the climber
         climber.run();
