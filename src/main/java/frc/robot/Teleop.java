@@ -76,8 +76,8 @@ public class Teleop
      */
     public void init()
     {
-        // mainShuffleboard.setDriverControllerSettings();
-        // mainShuffleboard.setOperatorControllerSettings();
+        mainShuffleboard.setDriverControllerSettings();
+        mainShuffleboard.setOperatorControllerSettings();
         driverController.resetRumbleCounter();
         // shooter.turnLightOn();
     }
@@ -147,8 +147,16 @@ public class Teleop
         }
 
         //run the drivetrain
-        drivetrain.westCoastDrive(driverController.getAction(DriverAxisAction.kMove)
-                                , driverController.getAction(DriverAxisAction.kRotate));
+        if(driverController.getAction(DriverButtonAction.kDriveBoost))
+        {
+            drivetrain.westCoastDrive(Math.signum(driverController.getAction(DriverAxisAction.kMove))
+                                    , driverController.getAction(DriverAxisAction.kRotate));
+        }
+        else
+        {
+            drivetrain.westCoastDrive(driverController.getAction(DriverAxisAction.kMove)
+                                    , driverController.getAction(DriverAxisAction.kRotate));
+        }
 
         if(driverController.getAction() == DriverPOVAction.kShiftingUp.direction)
         {
