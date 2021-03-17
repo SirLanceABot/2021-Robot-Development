@@ -158,7 +158,7 @@ public class Teleop
                                     , driverController.getAction(DriverAxisAction.kRotate));
         }
 
-        if(driverController.getAction() == DriverPOVAction.kShiftingUp.direction)
+        if(driverController.getAction() == DriverPOVAction.kShiftingUp.direction || driverController.getAction(DriverButtonAction.kShiftingUp))
         {
             drivetrain.forceShiftUp();
         }
