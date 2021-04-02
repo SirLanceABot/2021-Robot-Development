@@ -219,15 +219,17 @@ public class Turret
      */
     public boolean rotateTo(double angle)
     {
+        double speed = 0.25;
+
         double currentAngle = getCurrentAngle();
         if(angle < currentAngle - 1)
         {
-            setSpeed(0.75);
+            setSpeed(speed);
             return false;
         }
         else if(angle > currentAngle + 1)
         {
-            setSpeed(-0.75);
+            setSpeed(-speed);
             return false;
         }
         else
@@ -265,6 +267,12 @@ public class Turret
      */
     public boolean alignWithTarget()
     {
+        double speed = 0.2;
+        double kp = .05;
+        if(Math.abs(turretVision.getAngleToTurn()) < (speed/kp))
+        {
+            speed = Math.max(0.07, kp * Math.abs(turretVision.getAngleToTurn()));
+        }
         turretVision = vision.getTurret();
 
         if(turretVision.isFreshData())
@@ -272,13 +280,13 @@ public class Turret
             if(turretVision.getAngleToTurn() > 0.5)
             {
                 System.out.println("turning to the right" + "\t\tangle to turn: " + turretVision.getAngleToTurn());
-                setSpeed(0.13);
+                setSpeed(speed);
                 return false;
             }
             else if(turretVision.getAngleToTurn() < -0.5)
             {
                 System.out.println("turning to the left" +  "\t\tangle to turn: " + turretVision.getAngleToTurn());
-                setSpeed(-0.13);
+                setSpeed(-speed);
                 return false;
             }
             else
@@ -287,6 +295,10 @@ public class Turret
                 stop();
                 return true;
             }
+        }
+        else
+        {
+            stop();
         }
         return false;
 

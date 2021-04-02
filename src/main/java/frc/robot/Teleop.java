@@ -79,7 +79,7 @@ public class Teleop
         mainShuffleboard.setDriverControllerSettings();
         mainShuffleboard.setOperatorControllerSettings();
         driverController.resetRumbleCounter();
-        // shooter.turnLightOn();
+        shooter.turnLightOn();
     }
 
     /**
@@ -178,5 +178,6 @@ public class Teleop
     public void end()
     {
         shooter.overrideFSM();
+        shooter.turnLightOff();
     }
 }
