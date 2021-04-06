@@ -23,8 +23,10 @@ public class DriverController extends Xbox
 
     public enum DriverButtonAction
     {
-        kRaiseArms(Button.kA),
-        kLowerArms(Button.kB),
+        // kRaiseArms(Button.kA),
+        // kLowerArms(Button.kB),
+
+        kReverseDirection(Button.kB),
 
         kIntakeUp(Button.kY),
         kIntakeDown(Button.kX),

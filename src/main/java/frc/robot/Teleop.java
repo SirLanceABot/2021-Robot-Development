@@ -17,8 +17,12 @@ import frc.controls.DriverController.DriverAxisAction;
 import frc.controls.DriverController.DriverButtonAction;
 import frc.controls.DriverController.DriverPOVAction;
 import frc.controls.OperatorController;
+import frc.controls.Xbox;
+
 import frc.controls.OperatorController.OperatorAxisAction;
 import frc.controls.OperatorController.OperatorButtonAction;
+import frc.controls.Xbox.Button;
+
 import frc.shuffleboard.MainShuffleboard;
 
 /**
@@ -58,6 +62,8 @@ public class Teleop
     private static Roller roller = Roller.getInstance();
     private static Wrist wrist = Wrist.getInstance();
     private static Teleop teleop = new Teleop();
+
+    private static boolean moveIsFlipped = false;
 
     private Teleop()
     {
@@ -144,6 +150,12 @@ public class Teleop
         else
         {
             intake.runFSM();
+        }
+
+        if (driverController.getRawButtonPressed(2))
+        {
+            moveIsFlipped = !moveIsFlipped;
+            driverController.setAxisIsFlipped(DriverController.Axis.kLeftY, moveIsFlipped);
         }
 
         //run the drivetrain

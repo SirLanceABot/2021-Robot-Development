@@ -61,6 +61,7 @@ public class Climber
      */
     public void run()
     {
+        /*
         if(driverController.getRawButton(7))
         {
             arm.setExtensionSpeed(-0.3);
@@ -86,6 +87,7 @@ public class Climber
             arm.holdArm();
             winch.stopWinch();
         }
+        */
     }
 
     public double getArmEncoderPosition()
