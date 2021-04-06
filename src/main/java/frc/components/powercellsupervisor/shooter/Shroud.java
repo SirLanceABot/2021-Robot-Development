@@ -28,10 +28,10 @@ public class Shroud
     private static final int UPPER_LIMIT = 122; //TODO: Find out the upper limit
     private static final int LOWER_LIMIT = -5;   //TODO: Find out the lower limit
     private static final int TRENCH_SHOT = 70;
-    private static final int CLOSE_SHOT = 10;
+    private static final int CLOSE_SHOT = 40;
     private static final int TOTAL_TICKS = 100; //TODO: Find out the total ticks
     private static final int TOTAL_DEGREES = 45; //TODO: Find the total degrees
-    private static final int PLUS_MINUS_ERROR = 5;
+    private static final int PLUS_MINUS_ERROR = 2;
 
     private static double currentAngle;
     private static boolean isMoving = false;
@@ -162,10 +162,12 @@ public class Shroud
     /**
      * sets the shroud to the angle of the close shot
      */
-    private void setAngleToCloseShot()
+    public void setAngleToCloseShot()
     {
-        if(motor.getSelectedSensorPosition(0) < CLOSE_SHOT - PLUS_MINUS_ERROR) {setSpeed(0.5);}
-        if(motor.getSelectedSensorPosition(0) > CLOSE_SHOT + PLUS_MINUS_ERROR) {setSpeed(-0.5);}
+        if(motor.getSelectedSensorPosition(0) < CLOSE_SHOT - PLUS_MINUS_ERROR) {setSpeed(0.3);}
+        else if(motor.getSelectedSensorPosition(0) > CLOSE_SHOT + PLUS_MINUS_ERROR) {setSpeed(-0.3);}
+        else setSpeed(0);
+        System.out.println(motor.getSelectedSensorPosition(0));
     }
 
     /**

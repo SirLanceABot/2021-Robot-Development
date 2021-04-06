@@ -114,7 +114,7 @@ public class Flywheel
         {
             masterMotor.set(ControlMode.PercentOutput, 0.0);
         }
-        System.out.println(getRPM());
+        // System.out.println(getRPM());
     }
 
 

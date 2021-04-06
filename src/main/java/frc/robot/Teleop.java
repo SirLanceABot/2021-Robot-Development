@@ -122,7 +122,8 @@ public class Teleop
             shooter.overrideFSM();
             turret.setSpeed(operatorController.getAction(OperatorAxisAction.kTurret)); 
             flywheel.setSpeedOverride(operatorController.getAction(OperatorAxisAction.kShooterPower));
-            shroud.setSpeed(operatorController.getAction(OperatorAxisAction.kShroud));        
+           // shroud.setSpeed(operatorController.getAction(OperatorAxisAction.kShroud));     
+            shroud.setAngleToCloseShot();   
         }
         else if(operatorController.getAction(OperatorButtonAction.kShooterOverride))
         {

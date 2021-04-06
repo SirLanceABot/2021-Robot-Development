@@ -411,7 +411,7 @@ public class Shuttle
     {
         if(!isEmpty())
         {
-            setSpeed(0.5);
+            setSpeed(0.25);
         }
     }
     

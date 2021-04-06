@@ -271,7 +271,7 @@ public class Turret
         double kp = .05;
         if(Math.abs(turretVision.getAngleToTurn()) < (speed/kp))
         {
-            speed = Math.max(0.07, kp * Math.abs(turretVision.getAngleToTurn()));
+            speed = Math.max(0.1, kp * Math.abs(turretVision.getAngleToTurn()));
         }
         turretVision = vision.getTurret();
 
